@@ -32,6 +32,43 @@ forge test -vv       # verbose, see individual assertions
 forge test --match-path "test/05-vault/*"   # a single assignment
 ```
 
+## Deploying with the Foundry scripts
+
+Every assignment has a deploy script under script/, which deploys the main contract plus any
+demo tokens/oracles it needs to be immediately usable. Each script reads the deployer's private
+key from the PRIVATE_KEY environment variable -- never hardcode a key in the script and never
+commit a .env file containing one.
+
+```bash
+# 1. In one terminal, start a local chain:
+anvil
+
+# 2. In another terminal, export a private key (use one of anvil's printed demo keys locally --
+#    never do this with a real key on a real network):
+export PRIVATE_KEY=0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+
+# 3. Run any script, e.g.:
+forge script script/01-launchpad/DeployTokenLaunchpad.s.sol --rpc-url http://127.0.0.1:8545 --broadcast
+```
+
+Each script prints the deployed contract addresses via console2.log so you can copy them
+straight into cast call / cast send commands. The full list:
+
+```
+script/01-launchpad/DeployTokenLaunchpad.s.sol
+script/02-nft-minter/DeployMerkleNFTMinter.s.sol
+script/03-vesting/DeployTokenVestingVault.s.sol
+script/04-governance/DeployDAOTreasuryGovernor.s.sol
+script/05-vault/DeployYieldVault.s.sol
+script/06-multisig/DeployMultisigPayroll.s.sol
+script/07-marketplace/DeployNFTMarketplace.s.sol
+script/08-crowdfunding/DeployMilestoneCrowdfunding.s.sol
+script/09-lending/DeployCollateralizedLending.s.sol
+```
+
+To deploy to a real testnet instead of a local chain, swap --rpc-url http://127.0.0.1:8545 for
+your testnet RPC URL (e.g. from Alchemy or Infura) and use a funded testnet-only private key.
+
 ## Layout
 
 | # | Folder | Contract | Tests |
